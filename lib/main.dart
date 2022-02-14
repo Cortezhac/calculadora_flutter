@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color txtColorBtn = Colors.white;
   Color txtColorBtn2 = Colors.blue;
   String _txtDatos = '0';
+  String _txtRespuesta = '0';
 
   // funcion que agrega los botones
   Widget agregarBoton(String texto, Color colorFondo, Color txtColor) {
@@ -113,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(10.0),
                 margin: const EdgeInsets.only(bottom: 3),
                 child: OutlinedButton(
-                  onPressed: () => {addData('+')},
+                  onPressed: () => {addOperador('+')},
                   child: Text(
                     '+',
                     style: TextStyle(color: txtColorBtn2, fontSize: 40),
@@ -153,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(10.0),
                 margin: const EdgeInsets.only(bottom: 3),
                 child: OutlinedButton(
-                  onPressed: () => {addData('/')},
+                  onPressed: () => {addOperador('/')},
                   child: Text(
                     '/',
                     style: TextStyle(color: txtColorBtn2, fontSize: 40),
@@ -212,6 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // logica
   double valor1 = 0;
   double valor2 = 0;
+  double salida = 0;
   String operador = '';
 
   void addData(String dato) {
@@ -228,8 +232,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void addOperador(String ope) {
     if (operador == '') {
-      valor1 = _txtDatos as double;
+      //valor1 = _txtDatos as double;
       operador = ope;
+      setState(() {
+        _txtDatos += ope;
+      });
+    }
+  }
+
+  void operar() {
+    if (operador != '') {
+      valor2 = _txtDatos.substring(0, _txtDatos.indexOf(operador)) as double;
+      switch (operador) {
+        case '+':
+          salida = valor1 + valor2;
+          break;
+      }
+
+      setState(() {
+        _txtRespuesta = salida.toString();
+      });
     }
   }
 
@@ -237,8 +259,10 @@ class _MyHomePageState extends State<MyHomePage> {
     valor1 = 0;
     valor2 = 0;
     operador = '';
+    salida = 0;
     setState(() {
       _txtDatos = '0';
+      _txtRespuesta = '0';
     });
   }
 }
